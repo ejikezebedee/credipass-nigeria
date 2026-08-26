@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CONSUMER
+  SME
+  LENDER
+  BUSINESS
+  ADMIN
+}
+
+enum ConsentStatus {
+  PENDING
+  GRANTED
+  REVOKED
+  EXPIRED
+}
+
+enum RiskRecommendation {
+  REVIEW_RECOMMENDED
+  ADDITIONAL_INFORMATION_RECOMMENDED
+  MANUAL_ASSESSMENT_RECOMMENDED
+}
+
+enum ReportRequestStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+model User {
+  id String @id @default(cuid())
+  emailMasked String @unique
+  displayNameMasked String
+  role Role
+  createdAt DateTime @default(now())
+  riskEvaluations RiskEvaluation[]
+  passports CreditPassport[]
+  reportRequests ReportRequest[]
+}
+
+model RiskEvaluation {
+  id String @id @default(cuid())
+  subjectId String
+  subject User @relation(fields: [subjectId], references: [id])
+  recommendation RiskRecommendation
+  rationaleCode String
+  createdAt DateTime @default(now())
+}
+
+model CreditPassport {
+  id String @id @default(cuid())
+  subjectId String
+  subject User @relation(fields: [subjectId], references: [id])
+  consentStatus ConsentStatus
+  maskedIdentityReference String
+  createdAt DateTime @default(now())
+}
+
+model ReportRequest {
+  id String @id @default(cuid())
+  requesterId String
+  requester User @relation(fields: [requesterId], references: [id])
+  status ReportRequestStatus @default(PENDING)
+  purposeCode String
+  createdAt DateTime @default(now())
+}

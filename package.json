@@ -1,0 +1,26 @@
+{
+  "name": "credipass-nigeria",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "build": "npm run build -w @credipass/api && npm run build -w @credipass/shared-types && npm run build -w @credipass/config",
+    "dev": "npm run start:dev -w @credipass/api",
+    "test": "npm run test -w @credipass/api && npm run test:e2e -w @credipass/api",
+    "lint": "npm run lint -w @credipass/api && npm run lint -w @credipass/shared-types && npm run lint -w @credipass/config",
+    "contract:openapi": "npm run openapi:generate -w @credipass/api",
+    "contract:types": "openapi-typescript docs/openapi.json -o packages/shared-types/src/generated/openapi.ts",
+    "contract:generate": "npm run contract:openapi && npm run contract:types",
+    "contract:examples": "node scripts/check-api-examples.mjs",
+    "contract:check": "node scripts/check-contract.mjs",
+    "ci": "npm run contract:check && npm run lint && npm run test && npm run build",
+    "db:generate": "npm run prisma:generate -w @credipass/api",
+    "db:migrate": "npm run prisma:migrate -w @credipass/api",
+    "db:seed": "npm run prisma:seed -w @credipass/api"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.8.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": { "node": ">=20" }
+}

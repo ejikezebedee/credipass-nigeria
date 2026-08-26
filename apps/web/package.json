@@ -1,0 +1,6 @@
+{
+  "name": "@credipass/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Qwen-owned frontend workspace. No feature UI in Sprint 0."
+}

@@ -1,0 +1,106 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "API process is healthy.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Check API process health",
+        "tags": [
+          "system"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "CrediPass Nigeria API",
+    "description": "Consent-led credit passport infrastructure. Sprint 0 contract only.",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "HealthDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ],
+            "example": "ok"
+          },
+          "service": {
+            "type": "string",
+            "example": "credipass-api"
+          },
+          "version": {
+            "type": "string",
+            "example": "0.1.0"
+          }
+        },
+        "required": [
+          "status",
+          "service",
+          "version"
+        ]
+      },
+      "ResponseMetaDto": {
+        "type": "object",
+        "properties": {
+          "correlationId": {
+            "type": "string",
+            "example": "demo-request-001"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2026-08-26T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "correlationId",
+          "timestamp"
+        ]
+      },
+      "HealthResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/HealthDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      }
+    }
+  }
+}
