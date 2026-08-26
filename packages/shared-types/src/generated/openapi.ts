@@ -21,6 +21,91 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Register a consumer account */
+        post: operations["register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Authenticate without disclosing account existence */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Rotate a refresh token and issue a new access token */
+        post: operations["refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke the current session */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Return the authenticated user and RBAC role */
+        get: operations["me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -48,6 +133,106 @@ export interface components {
             data: components["schemas"]["HealthDto"];
             meta: components["schemas"]["ResponseMetaDto"];
         };
+        RegisterRequest: {
+            /** @example new.user@example.test */
+            email: string;
+            /** @example Correct-Horse-47! */
+            password: string;
+            /** @example New User */
+            displayName: string;
+        };
+        /** @enum {string} */
+        Role: "CONSUMER" | "SME_OWNER" | "BUSINESS_USER" | "COOPERATIVE_ADMIN" | "ADMIN" | "SUPER_ADMIN";
+        AuthUserDto: {
+            /** @example user_demo_001 */
+            id: string;
+            /** @example New User */
+            displayName: string;
+            /** @example ne***@example.test */
+            maskedEmail: string;
+            /** @example CONSUMER */
+            role: components["schemas"]["Role"];
+        };
+        SessionSummary: {
+            /** @example session_demo_001 */
+            id: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+        };
+        AuthResponse: {
+            /** @description Short-lived JWT access token. */
+            accessToken: string;
+            /** @description Opaque rotating refresh token. Store securely. */
+            refreshToken: string;
+            /** @example 900 */
+            expiresIn: number;
+            user: components["schemas"]["AuthUserDto"];
+            session: components["schemas"]["SessionSummary"];
+        };
+        SuccessMetaDto: {
+            /** @example request-001 */
+            correlationId: string;
+            /** Format: date-time */
+            timestamp: string;
+        };
+        AuthSuccessResponse: {
+            /** @example true */
+            success: boolean;
+            data: components["schemas"]["AuthResponse"];
+            meta: components["schemas"]["SuccessMetaDto"];
+        };
+        AuthErrorDetail: {
+            /** @example AUTH_INVALID_CREDENTIALS */
+            code: string;
+            /** @example Invalid email or password. */
+            message: string;
+        };
+        ErrorMetaDto: {
+            /** @example request-001 */
+            correlationId: string;
+            /** Format: date-time */
+            timestamp: string;
+            /** @example /auth/login */
+            path: string;
+        };
+        AuthErrorResponse: {
+            /** @example false */
+            success: boolean;
+            error: components["schemas"]["AuthErrorDetail"];
+            meta: components["schemas"]["ErrorMetaDto"];
+        };
+        LoginRequest: {
+            /** @example new.user@example.test */
+            email: string;
+            /** @example Correct-Horse-47! */
+            password: string;
+        };
+        RefreshRequest: {
+            /** @example session-id.secret */
+            refreshToken: string;
+        };
+        LogoutResponse: {
+            /** @example true */
+            loggedOut: boolean;
+        };
+        LogoutSuccessResponse: {
+            /** @example true */
+            success: boolean;
+            data: components["schemas"]["LogoutResponse"];
+            meta: components["schemas"]["SuccessMetaDto"];
+        };
+        CurrentUserResponse: {
+            user: components["schemas"]["AuthUserDto"];
+            session: components["schemas"]["SessionSummary"];
+        };
+        CurrentUserSuccessResponse: {
+            /** @example true */
+            success: boolean;
+            data: components["schemas"]["CurrentUserResponse"];
+            meta: components["schemas"]["SuccessMetaDto"];
+        };
     };
     responses: never;
     parameters: never;
@@ -73,6 +258,153 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HealthResponseDto"];
+                };
+            };
+        };
+    };
+    register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSuccessResponse"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthErrorResponse"];
+                };
+            };
+        };
+    };
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSuccessResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthErrorResponse"];
+                };
+            };
+        };
+    };
+    refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RefreshRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthSuccessResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthErrorResponse"];
+                };
+            };
+        };
+    };
+    logout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LogoutSuccessResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthErrorResponse"];
+                };
+            };
+        };
+    };
+    me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CurrentUserSuccessResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthErrorResponse"];
                 };
             };
         };

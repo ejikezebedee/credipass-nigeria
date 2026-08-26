@@ -9,10 +9,24 @@ datasource db {
 
 enum Role {
   CONSUMER
-  SME
-  LENDER
-  BUSINESS
+  SME_OWNER
+  BUSINESS_USER
+  COOPERATIVE_ADMIN
   ADMIN
+  SUPER_ADMIN
+}
+
+enum AuditEvent {
+  USER_REGISTERED
+  AUTHENTICATION_SUCCEEDED
+  AUTHENTICATION_FAILED
+  TOKEN_REFRESHED
+  SESSION_LOGGED_OUT
+  CONSENT_GRANTED
+  CONSENT_REVOKED
+  IDENTITY_VIEWED
+  RISK_EVALUATION_REQUESTED
+  REPORT_REQUESTED
 }
 
 enum ConsentStatus {
@@ -36,13 +50,41 @@ enum ReportRequestStatus {
 
 model User {
   id String @id @default(cuid())
-  emailMasked String @unique
-  displayNameMasked String
+  email String @unique
+  passwordHash String
+  displayName String
   role Role
   createdAt DateTime @default(now())
   riskEvaluations RiskEvaluation[]
   passports CreditPassport[]
   reportRequests ReportRequest[]
+  sessions AuthSession[]
+  auditLogs AuditLog[]
+}
+
+model AuthSession {
+  id String @id
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokenHash String
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  lastRotatedAt DateTime @default(now())
+  revokedAt DateTime?
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+  actorId String?
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  event AuditEvent
+  correlationId String
+  metadata Json
+  createdAt DateTime @default(now())
+  @@index([actorId, createdAt])
+  @@index([event, createdAt])
 }
 
 model RiskEvaluation {

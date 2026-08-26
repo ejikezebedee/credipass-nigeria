@@ -2,11 +2,11 @@
   "notice": "Synthetic demonstration data only. No real identity numbers or contact details.",
   "users": [
     { "id": "consumer_demo_001", "role": "CONSUMER", "maskedName": "Consumer Demo" },
-    { "id": "sme_demo_001", "role": "SME", "maskedName": "SME Demo" },
-    { "id": "lender_demo_001", "role": "LENDER", "maskedName": "Lender Demo" },
+    { "id": "sme_demo_001", "role": "SME_OWNER", "maskedName": "SME Demo" },
+    { "id": "business_demo_001", "role": "BUSINESS_USER", "maskedName": "Business Demo" },
     { "id": "admin_demo_001", "role": "ADMIN", "maskedName": "Admin Demo" }
   ],
   "riskEvaluation": { "id": "risk_demo_001", "recommendation": "REVIEW_RECOMMENDED" },
   "creditPassport": { "id": "passport_demo_001", "consentStatus": "GRANTED", "maskedIdentityReference": "***-***-4821" },
-  "reportRequest": { "id": "report_demo_001", "status": "PENDING", "purposeCode": "DEMO_CREDIT_REVIEW" }
+  "reportRequest": { "id": "report_demo_001", "status": "PENDING", "purposeCode": "DEMO_CREDIT_REVIEW", "requesterId": "business_demo_001" }
 }

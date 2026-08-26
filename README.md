@@ -22,6 +22,8 @@ npm run dev
 - Health: `http://localhost:3000/health`
 - Swagger: `http://localhost:3000/docs`
 
+Sprint 1 integration endpoints: `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`, and `GET /me`. Qwen must generate its API client/types from `docs/openapi.json`; it must never define parallel request or response fields manually.
+
 ## Contract workflow
 
 1. Update backend DTOs/controllers.

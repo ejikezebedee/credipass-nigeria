@@ -18,7 +18,7 @@ describe('security baseline', () => {
 
   it('defines governed audit, role, and consent vocabularies', () => {
     expect(Object.keys(AuditEvent).length).toBeGreaterThan(0);
-    expect(Object.values(Role)).toEqual(expect.arrayContaining(['CONSUMER', 'SME', 'LENDER', 'BUSINESS', 'ADMIN']));
+    expect(Object.values(Role)).toEqual(expect.arrayContaining(['CONSUMER', 'SME_OWNER', 'BUSINESS_USER', 'COOPERATIVE_ADMIN', 'ADMIN', 'SUPER_ADMIN']));
     expect(Object.values(ConsentStatus)).toEqual(expect.arrayContaining(['PENDING', 'GRANTED', 'REVOKED', 'EXPIRED']));
   });
 });

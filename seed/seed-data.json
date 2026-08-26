@@ -1,0 +1,12 @@
+{
+  "notice": "Synthetic integration data only. Passwords are created as Argon2id hashes by prisma/seed.ts and no credential hashes are exposed here.",
+  "users": [
+    { "id": "consumer_demo_001", "role": "CONSUMER", "email": "consumer@example.test" },
+    { "id": "sme_demo_001", "role": "SME_OWNER", "email": "sme@example.test" },
+    { "id": "business_demo_001", "role": "BUSINESS_USER", "email": "business@example.test" },
+    { "id": "admin_demo_001", "role": "ADMIN", "email": "admin@example.test" }
+  ],
+  "riskEvaluation": { "id": "risk_demo_001", "recommendation": "REVIEW_RECOMMENDED" },
+  "creditPassport": { "id": "passport_demo_001", "consentStatus": "GRANTED", "maskedIdentityReference": "***-***-4821" },
+  "reportRequest": { "id": "report_demo_001", "status": "PENDING", "purposeCode": "DEMO_CREDIT_REVIEW", "requesterId": "business_demo_001" }
+}

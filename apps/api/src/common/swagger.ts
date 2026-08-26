@@ -6,6 +6,7 @@ export function createOpenApiDocument(app: INestApplication) {
     .setTitle('CrediPass Nigeria API')
     .setDescription('Consent-led credit passport infrastructure. Sprint 0 contract only.')
     .setVersion('0.1.0')
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .addServer('http://localhost:3000', 'Local development')
     .build();
   return SwaggerModule.createDocument(app, config, { operationIdFactory: (_controller, method) => method });
