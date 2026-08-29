@@ -1,0 +1,10 @@
+export function FullScreenLoader() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-muted/40">
+      <div
+        className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent"
+        aria-label="Loading"
+      />
+    </div>
+  );
+}
